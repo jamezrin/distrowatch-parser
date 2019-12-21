@@ -7,7 +7,7 @@ async function queryDataSpanTypes(): Promise<any> {
   const dataSpans = await provider.fetchDataSpans();
 
   dataSpans.forEach(value => {
-    console.log(value.dataSpanId);
+    console.log(`${value.dataSpanId.padEnd(15)} ${value.dataSpanName}`);
   });
 }
 
@@ -45,6 +45,7 @@ yargs
     yargs => {
       yargs.positional('data-spans', {
         describe: 'the data span(s) to fetch',
+        type: 'string',
         default: ['all'],
       });
     },
