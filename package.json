@@ -5,7 +5,9 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc",
-    "start": "tsc && node lib/index.js"
+    "start": "tsc && node lib/index.js",
+    "prepare": "npm run build",
+    "postversion": "git push && git push --tags"
   },
   "repository": {
     "type": "git",
