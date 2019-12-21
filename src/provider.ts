@@ -26,17 +26,17 @@ export interface DistroWatchDistribution {
   value: number;
 }
 
+export interface DistroWatchRanking {
+  dataSpanName: string;
+  distributionsRanking: Array<DistroWatchDistribution>;
+  rankingType: DistroWatchRankingType;
+}
+
 export enum DistroWatchRankingType {
   UNKNOWN,
   HITS_PER_DAY,
   TRENDING_PAGE_HITS,
   RATING
-}
-
-export interface DistroWatchRanking {
-  dataSpanName: string;
-  distributionsRanking: Array<DistroWatchDistribution>;
-  rankingType: DistroWatchRankingType;
 }
 
 export async function fetchDataSpans(): Promise<
