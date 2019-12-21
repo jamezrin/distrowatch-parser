@@ -1,3 +1,3 @@
-const provider = require("./provider");
+const provider = require('./provider');
 
 export default provider;

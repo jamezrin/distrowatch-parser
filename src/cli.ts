@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import yargs from "yargs";
-import * as provider from "./provider";
+import yargs from 'yargs';
+import * as provider from './provider';
 
 async function queryDataSpanTypes(): Promise<any> {
   const dataSpans = await provider.fetchDataSpans();
@@ -12,20 +12,16 @@ async function queryDataSpanTypes(): Promise<any> {
 }
 
 async function queryRanking(dataSpans: Array<string>): Promise<any> {
-  if (!dataSpans.includes("all")) {
+  if (!dataSpans.includes('all')) {
     const allowedDataSpans = await provider.fetchDataSpans();
-    const allowedDataSpanIds = allowedDataSpans.map(
-      dataSpan => dataSpan.dataSpanId
-    );
+    const allowedDataSpanIds = allowedDataSpans.map(dataSpan => dataSpan.dataSpanId);
 
     dataSpans.forEach(async dataSpan => {
       if (allowedDataSpanIds.includes(dataSpan)) {
         const ranking = await provider.fetchRanking(dataSpan);
         console.log(JSON.stringify(ranking));
       } else {
-        console.error(
-          `'${dataSpan}' is not a valid data span, run 'distrowatch list-types'`
-        );
+        console.error(`'${dataSpan}' is not a valid data span, run 'distrowatch list-types'`);
       }
     });
   } else {
@@ -36,25 +32,25 @@ async function queryRanking(dataSpans: Array<string>): Promise<any> {
 
 yargs
   .command(
-    ["list-types", "list-spans", "list"],
-    "list the types of data spans you can choose from",
+    ['list-types', 'list-spans', 'list'],
+    'list the types of data spans you can choose from',
     () => {},
     () => {
       queryDataSpanTypes();
-    }
+    },
   )
   .command(
-    ["fetch-ranking [data-spans..]", "get-ranking", "ranking"],
-    "fetches the ranking",
+    ['fetch-ranking [data-spans..]', 'get-ranking', 'ranking'],
+    'fetches the ranking',
     yargs => {
-      yargs.positional("data-spans", {
-        describe: "the data span(s) to fetch",
-        default: ["all"]
+      yargs.positional('data-spans', {
+        describe: 'the data span(s) to fetch',
+        default: ['all'],
       });
     },
     argv => {
       queryRanking(argv.dataSpans as Array<string>);
-    }
+    },
   )
   .demandCommand()
   .wrap(yargs.terminalWidth()).argv;

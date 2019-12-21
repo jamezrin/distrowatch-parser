@@ -23,7 +23,6 @@
     "@types/cheerio": "^0.22.15",
     "axios": "^0.19.0",
     "cheerio": "^1.0.0-rc.3",
-    "tslint": "^5.20.1",
     "typescript": "^3.7.4",
     "yargs": "^15.0.2"
   },
@@ -31,6 +30,9 @@
     "distrowatch-parser": "./dist/cli.js"
   },
   "devDependencies": {
-    "@types/yargs": "^13.0.3"
+    "@types/yargs": "^13.0.3",
+    "prettier": "^1.19.1",
+    "tslint": "^5.20.1",
+    "tslint-config-prettier": "^1.18.0"
   }
 }
