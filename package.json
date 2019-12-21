@@ -29,5 +29,8 @@
   },
   "bin": {
     "distrowatch-parser": "./dist/cli.js"
+  },
+  "devDependencies": {
+    "@types/yargs": "^13.0.3"
   }
 }
