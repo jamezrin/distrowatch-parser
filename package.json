@@ -28,7 +28,6 @@
     "distrowatch-parser": "./lib/cli.js"
   },
   "devDependencies": {
-    "@types/axios": "^0.14.0",
     "@types/cheerio": "^0.22.15",
     "@types/yargs": "^13.0.3",
     "prettier": "^1.19.1",
