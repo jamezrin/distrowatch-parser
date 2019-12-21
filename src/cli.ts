@@ -53,5 +53,6 @@ yargs
       queryRanking(argv.dataSpans as Array<string>);
     },
   )
-  .demandCommand()
+  .demandCommand(1, '')
+  .strict()
   .wrap(yargs.terminalWidth()).argv;
