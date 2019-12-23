@@ -4,6 +4,15 @@
 
 This package provides both a command and a library you can use to get rankings out of the website.
 
+## Usage
+
+```
+npm install -g distrowatch-parser
+distrowatch-parser --help
+```
+
+## How it works
+
 Because DistroWatch does not provide an API for the ranking, this library does its thing by simply
 requesting the page and parsing the result and then converting it to objects.
 
