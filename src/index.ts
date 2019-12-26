@@ -93,9 +93,10 @@ export async function fetchRanking(dataSpanId: string): Promise<DistroWatchRanki
     dataSpanName: $('> option[selected]', dataSpanSelectElement).text(),
     rankingType: mapRankingType(rankingTypeElement.text()),
     distributionsRanking: rankingDistributionElements.toArray().map(rankingDistributionElement => {
+      const distributionLinkElement = $(':nth-child(2) a', rankingDistributionElement);
       return {
-        name: $(':nth-child(2) a', rankingDistributionElement).text(),
-        url: $(':nth-child(2) a', rankingDistributionElement).attr('href'),
+        name: distributionLinkElement.text(),
+        url: 'https://distrowatch.com/' + distributionLinkElement.attr('href'),
         rank: parseInt($(':nth-child(1)', rankingDistributionElement).text()),
         value: parseFloat($(':nth-child(3)', rankingDistributionElement).text()),
       };
