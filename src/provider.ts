@@ -19,8 +19,9 @@ export interface DistroWatchRankingDataSpan {
 }
 
 export interface DistroWatchDistribution {
-  rank: number;
   name: string;
+  url: string;
+  rank: number;
   value: number;
 }
 
@@ -54,7 +55,6 @@ export async function fetchDataSpans(): Promise<Array<DistroWatchRankingDataSpan
     .toArray()
     .map((value: CheerioElement) => {
       const dataSpanElement = $(value);
-
       return {
         dataSpanId: dataSpanElement.attr('value'),
         dataSpanName: dataSpanElement.text(),
@@ -86,9 +86,7 @@ export async function fetchRanking(dataSpanId: string): Promise<DistroWatchRanki
     });
 
   const rankingTypeElement = $('> tbody > tr > th:nth-child(3)', rankingTableElement);
-
   const dataSpanSelectElement = $('> tbody > tr > td > form > select', rankingTableElement);
-
   const rankingDistributionElements = $('> tbody > tr:nth-child(1n+4)', rankingTableElement);
 
   return {
@@ -96,8 +94,9 @@ export async function fetchRanking(dataSpanId: string): Promise<DistroWatchRanki
     rankingType: mapRankingType(rankingTypeElement.text()),
     distributionsRanking: rankingDistributionElements.toArray().map(rankingDistributionElement => {
       return {
+        name: $(':nth-child(2) a', rankingDistributionElement).text(),
+        url: $(':nth-child(2) a', rankingDistributionElement).attr('href'),
         rank: parseInt($(':nth-child(1)', rankingDistributionElement).text()),
-        name: $(':nth-child(2)', rankingDistributionElement).text(),
         value: parseFloat($(':nth-child(3)', rankingDistributionElement).text()),
       };
     }),
