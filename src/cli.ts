@@ -2,7 +2,6 @@
 
 import yargs from 'yargs';
 import fs from 'fs';
-import path from 'path';
 import { fetchRanking, fetchDataSpans, fetchAllRankings, DistroWatchRankingType } from './index';
 
 interface ListTypesCommandArguments {
@@ -20,8 +19,7 @@ async function handleListTypesCommand(args: ListTypesCommandArguments) {
   const dataSpans = await fetchDataSpans();
 
   if (args.file) {
-    const outputFile = path.resolve(__dirname, args.file);
-    fs.writeFileSync(outputFile, JSON.stringify(dataSpans));
+    fs.writeFileSync(args.file, JSON.stringify(dataSpans));
   }
 
   if (!args.json) {
@@ -61,8 +59,7 @@ async function handleFetchRankingCommand(args: FetchRankingCommandArguments) {
   const rankings = await fetchRankingBySpans(args.dataSpans);
 
   if (args.file) {
-    const outputFile = path.resolve(__dirname, args.file);
-    fs.writeFileSync(outputFile, JSON.stringify(rankings));
+    fs.writeFileSync(args.file, JSON.stringify(rankings));
   }
 
   if (!args.json) {
