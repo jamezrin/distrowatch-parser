@@ -2,7 +2,7 @@
 
 import yargs from 'yargs';
 import fs from 'fs';
-import { fetchRanking, fetchDataSpans, fetchAllRankings, DistroWatchRankingType } from './index';
+import { fetchRanking, fetchDataSpans, fetchAllRankings, DistroWatchRankingType, DistroWatchRanking } from './index';
 
 interface ListTypesCommandArguments {
   file: string;
@@ -34,7 +34,7 @@ async function handleListTypesCommand(args: ListTypesCommandArguments) {
   }
 }
 
-async function fetchRankingBySpans(dataSpans: Array<string>) {
+async function fetchRankingBySpans(dataSpans: Array<string>): Promise<Array<DistroWatchRanking>> {
   if (dataSpans.includes('all')) {
     const allRankings = await fetchAllRankings();
     return allRankings;
@@ -49,36 +49,46 @@ async function fetchRankingBySpans(dataSpans: Array<string>) {
         const ranking = await fetchRanking(dataSpan);
         return ranking;
       } else {
-        throw new Error(`'${dataSpan}' is not a valid data span`);
+        const err = new Error(`'${dataSpan}' is not a valid data span`);
+        err['type'] = 'INVALID_DATA_SPAN';
+        throw err;
       }
     }),
   );
 }
 
 async function handleFetchRankingCommand(args: FetchRankingCommandArguments) {
-  const rankings = await fetchRankingBySpans(args.dataSpans);
+  try {
+    const rankings = await fetchRankingBySpans(args.dataSpans);
 
-  if (args.file) {
-    fs.writeFileSync(args.file, JSON.stringify(rankings));
-  }
+    if (args.file) {
+      fs.writeFileSync(args.file, JSON.stringify(rankings));
+    }
 
-  if (!args.json) {
-    console.log(
-      `${'Span Name'.padEnd(25)} ${'Ranking Type'.padEnd(20)} ` +
-        `${'Name'.padEnd(20)} ${'Rank'.padEnd(5)} ${'Value'.padEnd(8)} ${'URL (before redirects)'}`,
-    );
-    rankings.forEach(ranking => {
-      const mappedRankingType = DistroWatchRankingType[ranking.rankingType];
-      ranking.distributionsRanking.forEach(distribution => {
-        console.log(
-          `${ranking.dataSpanName.padEnd(25)} ${mappedRankingType.padEnd(20)} ` +
-            `${distribution.name.padEnd(20)} ${distribution.rank.toString().padEnd(5)} ` +
-            `${distribution.value.toString().padEnd(8)} ${distribution.url}`,
-        );
+    if (!args.json) {
+      console.log(
+        `${'Span Name'.padEnd(25)} ${'Ranking Type'.padEnd(20)} ` +
+          `${'Name'.padEnd(20)} ${'Rank'.padEnd(5)} ${'Value'.padEnd(8)} ${'URL (before redirects)'}`,
+      );
+      rankings.forEach(ranking => {
+        const mappedRankingType = DistroWatchRankingType[ranking.rankingType];
+        ranking.distributionsRanking.forEach(distribution => {
+          console.log(
+            `${ranking.dataSpanName.padEnd(25)} ${mappedRankingType.padEnd(20)} ` +
+              `${distribution.name.padEnd(20)} ${distribution.rank.toString().padEnd(5)} ` +
+              `${distribution.value.toString().padEnd(8)} ${distribution.url}`,
+          );
+        });
       });
-    });
-  } else {
-    console.log(JSON.stringify(rankings));
+    } else {
+      console.log(JSON.stringify(rankings));
+    }
+  } catch (e) {
+    if (e.type === 'INVALID_DATA_SPAN') {
+      console.log(`Invalid command usage: ${e.message}`);
+    } else {
+      throw e;
+    }
   }
 }
 
