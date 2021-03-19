@@ -6,7 +6,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "start": "ts-node dist/index.js",
+    "start": "ts-node src/cli.ts",
     "prepare": "npm run build",
     "postversion": "git push && git push --tags"
   },
